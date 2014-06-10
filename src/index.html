@@ -1,0 +1,59 @@
+<!doctype html>
+<html>
+    <head>
+        <title>threejs-animations</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+
+        <!--requirejs-->
+        <script src="common/libs/require.js"></script>
+
+		<script type="x-shader/x-vertex" id="vertexShader">
+
+					varying vec3 vWorldPosition;
+
+					void main() {
+
+						vec4 worldPosition = modelMatrix * vec4( position, 1.0 );
+						vWorldPosition = worldPosition.xyz;
+
+						gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );
+
+					}
+
+				</script>
+
+				<script type="x-shader/x-fragment" id="fragmentShader">
+
+					uniform vec3 topColor;
+					uniform vec3 bottomColor;
+					uniform float offset;
+					uniform float exponent;
+
+					varying vec3 vWorldPosition;
+
+					void main() {
+
+						float h = normalize( vWorldPosition + offset ).y;
+						gl_FragColor = vec4( mix( bottomColor, topColor, max( pow( h, exponent ), 0.0 ) ), 1.0 );
+
+					}
+
+				</script>
+
+        <link href="assets/css/main.css" rel="stylesheet"/>
+    </head>
+    <body>
+        <!-- info on screen display -->
+        <div id="info">
+            <div class="top">
+                threejs-stampede | model by <a href="http://mirada.com/">mirada</a> from <a href="http://ro.me">rome</a>
+            </div>
+            <div class="bottom" id="inlineDoc" >
+                <a href="http://www.roblayton.com" target="_blank">roblayton.com</a> | <a href="https://github.com/mrdoob/three.js/" target="_blank">three.js</a>
+            </div> 
+        </div> 
+
+        <script src="assets/js/require.conf.js"></script>
+    </body>
+</html>
